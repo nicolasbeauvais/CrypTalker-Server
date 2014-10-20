@@ -20,7 +20,7 @@ class userController extends AbstractController
      *
      * @return mixed
      */
-    public function getRegister()
+    public function postRegister()
     {
         $response = $this->getUser()->register(
             Input::get('email'),
@@ -41,7 +41,7 @@ class userController extends AbstractController
      *
      * @return mixed
      */
-    public function getLogin()
+    public function postLogin()
     {
         $response = $this->getUser()->login(Input::get('pseudoOrEmail'), Input::get('password'));
 
