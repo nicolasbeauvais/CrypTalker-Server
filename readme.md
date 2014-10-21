@@ -16,8 +16,8 @@ Not a single message is stored in database.
 ### Friends
 | HTTP verb | Route                             | Explanation                                    | Logged | Status |
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
-| GET       | /api/friends/request/:iduser      | Make a friend request                          | Yes    | Ok     |
-| GET       | /api/friends/validate/:iduser     | Validate a friend invite                       | Yes    | TODO   |
+| GET       | /api/friends/request/:iduser      | Make a friend request                          | Yes    | OK     |
+| GET       | /api/friends/accept/:iduser     | Validate a friend invite                       | Yes    | OK     |
 | GET       | /api/friends/block/:iduser        | Block a friend                                 | Yes    | TODO   |
 
 ### Rooms
