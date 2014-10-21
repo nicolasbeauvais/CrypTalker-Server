@@ -48,5 +48,9 @@ class FriendController extends AbstractApiController
     public function getBlock($user_friend_id)
     {
         $this->logged();
+
+        $response = $this->getFriend()->block(Auth::user()->id, $user_friend_id);
+
+        return View::make('json', array('response' => $response));
     }
 }

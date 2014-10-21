@@ -76,11 +76,55 @@ class Friend extends AbstractModels
         return $this->response();
     }
 
+    public function block($user_id, $user_friend_id)
+    {
+        $user_id = (int)$user_id;
+        $user_friend_id = (int)$user_friend_id;
+
+        $this->required('validate', $user_id, $user_friend_id);
+
+        // What ?
+        if ($user_id === $user_friend_id) {
+            $this->error(null, 'You can\'t block yourself');
+            return $this->response();
+        }
+
+        // Already friend
+        if (!$this->isRealFriend($user_id, $user_friend_id)) {
+            $this->error('user_friend_id', 'You can\'t block a users if he\'s not your friend');
+            return $this->response();
+        }
+
+        $friendship = $this->getFriendShip($user_id, $user_friend_id);
+
+        if ($friendship['blocked']) {
+            $this->error('user_friend_id', 'You can\'t block a users if he\'s already blocked you');
+            return $this->response();
+        }
+
+        // Block the user
+        DB::table('friends')
+            ->where('user_id', '=', $user_id)
+            ->where('user_friend_id', '=', $user_friend_id, 'AND')
+            ->update(array('status' => -1));
+
+        return $this->response();
+    }
+
     private function isFriend($user_id, $user_friend_id)
     {
         return DB::table('friends')
             ->where('user_id', '=', $user_id)
             ->where('user_friend_id', '=', $user_friend_id, 'AND')
+            ->first() === null ? false : true;
+    }
+
+    private function isRealFriend($user_id, $user_friend_id)
+    {
+        return DB::table('friends')
+            ->where('user_id', '=', $user_id)
+            ->where('user_friend_id', '=', $user_friend_id, 'AND')
+            ->where('status', '=', 1, 'AND')
             ->first() === null ? false : true;
     }
 
@@ -91,5 +135,36 @@ class Friend extends AbstractModels
             ->where('user_friend_id', '=', $user_friend_id, 'AND')
             ->where('status', '=', 0, 'AND')
             ->first() === null ? false : true;
+    }
+
+    /**
+     * Return an array with the both way friendship connection.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     *
+     * @return array
+     */
+    private function getFriendShip($user_id, $user_friend_id)
+    {
+        $friendship = array();
+
+        $friendship['user'] = DB::table('friends')
+            ->where('user_id', '=', $user_id)
+            ->where('user_friend_id', '=', $user_friend_id, 'AND')
+            ->first();
+
+        if ($friendship['user']->status == 0) {
+            return $friendship;
+        }
+
+        $friendship['friend'] = DB::table('friends')
+            ->where('user_id', '=', $user_friend_id)
+            ->where('user_friend_id', '=', $user_id, 'AND')
+            ->first();
+
+        $friendship['blocked'] = ($friendship['user']->status == -1 || $friendship['user']->status == -1);
+
+        return  $friendship;
     }
 }
