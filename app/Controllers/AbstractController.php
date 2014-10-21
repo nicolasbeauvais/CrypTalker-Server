@@ -3,9 +3,11 @@
 namespace Controllers;
 
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\View;
-use Models\User;
 
+/**
+ * Class AbstractController
+ * @package Controllers
+ */
 class AbstractController extends Controller
 {
     /**
@@ -14,11 +16,19 @@ class AbstractController extends Controller
     private $modelInstances = array();
 
     /**
-     * @return User
+     * @return \Models\User\User
      */
     public function getUser()
     {
         return $this->giveModel('User');
+    }
+
+    /**
+     * @return \Models\Friend\Friend
+     */
+    public function getFriend()
+    {
+        return $this->giveModel('Friend');
     }
 
     /**

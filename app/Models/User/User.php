@@ -25,7 +25,6 @@ class User extends AbstractModels
         // test parameters
         $this->required('register', $email, $pseudo, $password, $password_c);
 
-
         // Email full lowercase
         $email = strtolower($email);
 

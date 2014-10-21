@@ -5,6 +5,10 @@ namespace Controllers\Api;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 
+/**
+ * Class UserController
+ * @package Controllers\Api
+ */
 class UserController extends AbstractApiController
 {
 
