@@ -21,6 +21,7 @@ class AbstractApiController extends AbstractController
 
         $data = array(
             'data' => array(),
+            'success' => false,
             'errors' => array(
                 'messages' => array(
                     'User must be logged in to the app'

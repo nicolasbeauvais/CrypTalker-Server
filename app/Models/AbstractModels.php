@@ -87,6 +87,7 @@ abstract class AbstractModels
 
         $response = array(
             'data' => $this->data,
+            'success' => $errors['errno'] === 200 ? true : false,
             'errors' => $errors
         );
 
