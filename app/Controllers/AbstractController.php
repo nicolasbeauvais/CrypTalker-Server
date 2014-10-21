@@ -6,8 +6,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\View;
 use Models\User;
 
-class AbstractController extends Controller {
-
+class AbstractController extends Controller
+{
     /**
      * We define all models here for autocompletion
      */
@@ -36,16 +36,4 @@ class AbstractController extends Controller {
 
         return $this->modelInstances[$name];
     }
-
-    /**
-     * Do a json answer and die.
-     *
-     * @param $data
-     */
-    public static function answerJson($data)
-    {
-        echo View::make('json', array('response' => $data))->render();
-        die;
-    }
-
 }

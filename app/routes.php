@@ -2,8 +2,8 @@
 
 // Socket API
 Route::group(array('prefix' => 'api'), function() {
-    Route::controller('/users', 'Controllers\api\userController');
-    Route::controller('/friends', 'Controllers\api\friendController');
-    Route::controller('/rooms', 'Controllers\api\roomController');
-    Route::controller('/messages', 'Controllers\api\messageController');
+    Route::controller('/users', 'Controllers\Api\UserController');
+    Route::controller('/friends', 'Controllers\Api\FriendController');
+    Route::controller('/rooms', 'Controllers\Api\RoomController');
+    Route::controller('/messages', 'Controllers\Api\MessageController');
 });

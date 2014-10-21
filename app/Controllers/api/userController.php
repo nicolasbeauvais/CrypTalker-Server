@@ -1,12 +1,11 @@
 <?php
 
-namespace Controllers\api;
+namespace Controllers\Api;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
-use Controllers\AbstractController;
 
-class userController extends AbstractController
+class UserController extends AbstractApiController
 {
 
     /**

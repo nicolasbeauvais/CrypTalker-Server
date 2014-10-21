@@ -146,7 +146,7 @@ abstract class AbstractModels
             }
 
             // faire dans base controlleur une fonction qui gere la vue de ce retour.
-            \Controllers\AbstractController::answerJson($this->response());
+            \Controllers\Api\AbstractApiController::answerJson($this->response());
 
         }
     }

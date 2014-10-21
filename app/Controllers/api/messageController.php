@@ -1,10 +1,11 @@
 <?php
 
-namespace Controllers\api;
+namespace Controllers\Api;
 
-use Controllers\AbstractController;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Input;
 
-class messageController extends AbstractController
+class MessageController extends AbstractApiController
 {
 
     public function getIndex()

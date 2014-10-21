@@ -1,11 +1,11 @@
 <?php
 
-namespace Controllers\api;
+namespace Controllers\Api;
 
-use View;
-use Controllers\AbstractController;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Input;
 
-class friendController extends AbstractController
+class FriendController extends AbstractApiController
 {
-    
+
 }
