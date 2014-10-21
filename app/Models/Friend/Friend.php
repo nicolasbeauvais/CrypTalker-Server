@@ -90,7 +90,7 @@ class Friend extends AbstractModels
         }
 
         // Already friend
-        if (!$this->isRealFriend($user_id, $user_friend_id)) {
+        if (!$this->isFriend($user_id, $user_friend_id, 1)) {
             $this->error('user_friend_id', 'You can\'t block a users if he\'s not your friend');
             return $this->response();
         }
@@ -111,21 +111,54 @@ class Friend extends AbstractModels
         return $this->response();
     }
 
-    private function isFriend($user_id, $user_friend_id)
+    public function unblock($user_id, $user_friend_id)
     {
-        return DB::table('friends')
+        $user_id = (int)$user_id;
+        $user_friend_id = (int)$user_friend_id;
+
+        $this->required('validate', $user_id, $user_friend_id);
+
+        // What ?
+        if ($user_id === $user_friend_id) {
+            $this->error(null, 'You can\'t unblock yourself');
+            return $this->response();
+        }
+
+        // Already friend
+        if (!$this->isFriend($user_id, $user_friend_id, -1)) {
+            $this->error('user_friend_id', 'You can\'t unblock a users you don\'t already blocked');
+            return $this->response();
+        }
+
+        $friendship = $this->getFriendShip($user_id, $user_friend_id);
+
+        if ($friendship['blocked'] && $friendship['friend']->status == -1) {
+            $this->error('user_friend_id', 'You can\'t unblock a users if he blocked you');
+            return $this->response();
+        }
+
+        // Block the user
+        DB::table('friends')
             ->where('user_id', '=', $user_id)
             ->where('user_friend_id', '=', $user_friend_id, 'AND')
-            ->first() === null ? false : true;
+            ->update(array('status' => 1));
+
+        return $this->response();
     }
 
-    private function isRealFriend($user_id, $user_friend_id)
+    private function isFriend($user_id, $user_friend_id, $status = null)
     {
-        return DB::table('friends')
+        $query = DB::table('friends')
             ->where('user_id', '=', $user_id)
-            ->where('user_friend_id', '=', $user_friend_id, 'AND')
-            ->where('status', '=', 1, 'AND')
-            ->first() === null ? false : true;
+            ->where('user_friend_id', '=', $user_friend_id, 'AND');
+
+        if ($status !== null) {
+            $query->where('status', '=', $status, 'AND');
+        }
+
+        $queryResponse = $query->first();
+
+        return  $queryResponse === null ? false : true;
     }
 
     private function isFriendWaiting($user_id, $user_friend_id)

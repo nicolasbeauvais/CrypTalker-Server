@@ -53,4 +53,18 @@ class FriendController extends AbstractApiController
 
         return View::make('json', array('response' => $response));
     }
+
+    /**
+     * Unblock a friend for the authenticated user.
+     *
+     * @param $user_friend_id
+     */
+    public function getUnblock($user_friend_id)
+    {
+        $this->logged();
+
+        $response = $this->getFriend()->unblock(Auth::user()->id, $user_friend_id);
+
+        return View::make('json', array('response' => $response));
+    }
 }
