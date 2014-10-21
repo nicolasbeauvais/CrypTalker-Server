@@ -16,10 +16,10 @@ Post request data are explained in the post parameters section of this readme.
 | POST      | /api/users/register               | Register a user to the app                     | No     | OK     |
 
 Post Parameters:
-- `(string)` email 
-- `(string)` pseudo
-- `(string)` password
-- `(string)` password
+- `(string)` **email** *A valid user email*
+- `(string)` **pseudo** *alpha_dash pseudo between 2 and 55 chars*
+- `(string)` **password** *password between 4 and 55 chars*
+- `(string)` **password_confirmation** *password confirmation*
 
 ##### Login
 | HTTP verb | Route                             | Explanation                                    | Logged | Status |
@@ -27,8 +27,8 @@ Post Parameters:
 | POST      | /api/users/login                  | Log a user to the app with is pseudo or email  | No     | OK     |
 
 Post Parameters:
-- `(string)` pseudoOrEmail 
-- `(string)` password
+- `(string)` **pseudoOrEmail** *the user pseudo or email*
+- `(string)` **password** *the user valid password*
 
 ##### Info
 | HTTP verb | Route                             | Explanation                                    | Logged | Status |
@@ -49,14 +49,15 @@ Post Parameters:
 | POST      | /api/rooms/create                 | Create a room                                  | Yes    | TODO   |
 
 Post Parameters:
-- `(array)` users_id (a list of users id to create the chat room)
+- `(array)` **users_id** *list of users id to create the chat room*
 
 | HTTP verb | Route                             | Explanation                                    | Logged | Status |
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
 | POST      | /api/rooms/name                   | Add a name to the room                         | Yes    | TODO   |
 
 Post Parameters:
-- `(array)` room_id (a list of users id to create the chat room)
+- `(int)` **romm_id** *the id of the room to name*
+- `(string)` **name** *name to give to the room*
 
 | HTTP verb | Route                             | Explanation                                    | Logged | Status |
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
