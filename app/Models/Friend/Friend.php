@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\DB;
 class Friend extends AbstractModels
 {
 
+    /**
+     * Make a friend request for the authenticated user.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     *
+     * @return array
+     */
     public function request($user_id, $user_friend_id)
     {
         $user_id = (int)$user_id;
@@ -41,12 +49,20 @@ class Friend extends AbstractModels
         return $this->response();
     }
 
+    /**
+     * Accept a friend request for the authenticated user.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     *
+     * @return array
+     */
     public function accept($user_id, $user_friend_id)
     {
         $user_id = (int)$user_id;
         $user_friend_id = (int)$user_friend_id;
 
-        $this->required('validate', $user_id, $user_friend_id);
+        $this->required('accept', $user_id, $user_friend_id);
 
         // What ?
         if ($user_id === $user_friend_id) {
@@ -76,12 +92,20 @@ class Friend extends AbstractModels
         return $this->response();
     }
 
+    /**
+     * Block a friend for the authenticated user.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     *
+     * @return array
+     */
     public function block($user_id, $user_friend_id)
     {
         $user_id = (int)$user_id;
         $user_friend_id = (int)$user_friend_id;
 
-        $this->required('validate', $user_id, $user_friend_id);
+        $this->required('block', $user_id, $user_friend_id);
 
         // What ?
         if ($user_id === $user_friend_id) {
@@ -111,12 +135,20 @@ class Friend extends AbstractModels
         return $this->response();
     }
 
+    /**
+     * Unblock a friend for the authenticated user.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     *
+     * @return array
+     */
     public function unblock($user_id, $user_friend_id)
     {
         $user_id = (int)$user_id;
         $user_friend_id = (int)$user_friend_id;
 
-        $this->required('validate', $user_id, $user_friend_id);
+        $this->required('unblock', $user_id, $user_friend_id);
 
         // What ?
         if ($user_id === $user_friend_id) {
@@ -126,7 +158,7 @@ class Friend extends AbstractModels
 
         // Already friend
         if (!$this->isFriend($user_id, $user_friend_id, -1)) {
-            $this->error('user_friend_id', 'You can\'t unblock a users you don\'t already blocked');
+            $this->error('user_friend_id', 'You can\'t unblock a users you didn\'t already blocked');
             return $this->response();
         }
 
@@ -146,6 +178,17 @@ class Friend extends AbstractModels
         return $this->response();
     }
 
+    /**
+     * Check if a user is friend with a another.
+     *
+     * Can be checked with a special friend status.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     * @param null $status
+     *
+     * @return bool
+     */
     private function isFriend($user_id, $user_friend_id, $status = null)
     {
         $query = DB::table('friends')
@@ -161,6 +204,14 @@ class Friend extends AbstractModels
         return  $queryResponse === null ? false : true;
     }
 
+    /**
+     * Check if the user has a pending friend request.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     *
+     * @return bool
+     */
     private function isFriendWaiting($user_id, $user_friend_id)
     {
         return DB::table('friends')

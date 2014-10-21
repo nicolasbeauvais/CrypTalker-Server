@@ -32,6 +32,14 @@ class AbstractController extends Controller
     }
 
     /**
+     * @return \Models\Room\Room
+     */
+    public function getRoom()
+    {
+        return $this->giveModel('Room');
+    }
+
+    /**
      * Instantiate a model class
      *
      * @param $name

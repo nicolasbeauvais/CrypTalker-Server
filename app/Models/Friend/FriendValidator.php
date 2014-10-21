@@ -5,8 +5,8 @@ namespace Models\Friend;
 use Models\AbstractValidator;
 
 /**
- * Class UserValidator
- * @package Models\Repositories\User
+ * Class FriendValidator
+ * @package Models\Friend
  */
 class FriendValidator extends AbstractValidator
 {
