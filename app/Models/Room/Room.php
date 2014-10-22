@@ -17,28 +17,29 @@ class Room extends AbstractModels
     /**
      * Create a room for the specified list of users ids.
      *
-     * @param $users_id
+     * @param $user_id
+     * @param $users_friend_id
      *
      * @return array
      */
-    public function create($user_id, $users_id)
+    public function create($user_id, $users_friend_id)
     {
         $user_id = (int) $user_id;
 
-        $this->required('create', $users_id);
+        $this->required('create', $users_friend_id);
 
-        $users_id_verified = array();
-        foreach ($users_id as $id) {
-            $users_id_verified[] = (int) $id;
+        $users_friend_id_verified = array();
+        foreach ($users_friend_id as $id) {
+            $users_friend_id_verified[] = (int) $id;
         }
 
         // Check if the user is friend with all the users in the list
         $nb_existing = DB::table('friends')
             ->where('user_id', '=', $user_id)
-            ->whereIn('user_friend_id', $users_id_verified)
+            ->whereIn('user_friend_id', $users_friend_id_verified)
             ->count();
 
-        if ($nb_existing != count($users_id_verified)) {
+        if ($nb_existing != count($users_friend_id_verified)) {
             $this->error(null, 'Invalid users ids');
             return $this->response();
         }
@@ -51,7 +52,8 @@ class Room extends AbstractModels
         ));
 
         $user_room = array();
-        foreach ($users_id_verified as $id) {
+        $users_friend_id_verified[] = $user_id;
+        foreach ($users_friend_id_verified as $id) {
             $user_room[] = array(
                 'user_id' => $id,
                 'room_id' => $room_id,
@@ -63,5 +65,59 @@ class Room extends AbstractModels
         DB::table('user_room')->insert($user_room);
 
         return $this->response();
+    }
+
+    /**
+     * Give a name to the specified room.
+     *
+     * @param $user_id
+     * @param $room_id
+     * @param $name
+     *
+     * @return array
+     */
+    public function name($user_id, $room_id, $name)
+    {
+        $user_id = (int) $user_id;
+        $room_id = (int) $room_id;
+
+        $this->required('create', $user_id, $room_id, $name);
+
+        if (!$this->isInRoom($user_id, $room_id)) {
+            $this->error(null, 'You must be in the room to change the room\'s name');
+            return $this->response();
+        }
+
+        $validation = $this->validate('name', array('name' => $name));
+
+        $this->parseValidation($validation);
+
+        if (!$validation->validated) {
+            return $this->response();
+        }
+
+        DB::table('rooms')
+            ->where('id', '=', $room_id)
+            ->update(array(
+                'name' => $name
+            ));
+
+        return $this->response();
+    }
+
+    /**
+     * Check if a user is in a room.
+     *
+     * @param $user_id
+     * @param $room_id
+     *
+     * @return bool
+     */
+    private function isInRoom($user_id, $room_id)
+    {
+        return DB::table('user_room')
+            ->where('user_id', '=', $user_id)
+            ->where('room_id', '=', $room_id, 'AND')
+            ->first() === null ? false : true;
     }
 }

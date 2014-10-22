@@ -40,7 +40,7 @@ Login Parameters:
 | HTTP verb | Route                             | Explanation                                    | Logged | Status |
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
 | POST      | /api/rooms/create                 | Create a room                                  | Yes    | OK     |
-| POST      | /api/rooms/name                   | Add a name to the room                         | Yes    | TODO   |
+| POST      | /api/rooms/name                   | Add a name to the room                         | Yes    | OK     |
 | GET       | /api/rooms/add/:user_id/:room_id  | Add a user to the room                         | Yes    | TODO   |
 | GET       | /api/rooms/quit/:room_id          | Remove the user from the room                  | Yes    | TODO   |
 
@@ -48,7 +48,7 @@ Create Parameters:
 - `(array)` **users_id** *list of users id to create the chat room*
 
 Name Parameters:
-- `(int)` **romm_id** *the id of the room to name*
+- `(int)` **room_id** *the id of the room to name*
 - `(string)` **name** *name to give to the room*
 
 ### Message (Ratchet PHP websocket)

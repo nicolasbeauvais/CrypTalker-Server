@@ -28,4 +28,23 @@ class RoomController extends AbstractApiController
 
         return View::make('json', array('response' => $response));
     }
+
+    /**
+     * Give a name to the specified room.
+     *
+     * Requires:
+     * $_POST['room_id']
+     * $_POST['name']
+     *
+     * @return mixed
+     */
+    public function postName()
+    {
+        $this->logged();
+
+        $response = $this->getRoom()->name(Auth::user()->id, Input::get('room_id'), Input::get('name'));
+
+        return View::make('json', array('response' => $response));
+    }
+
 }
