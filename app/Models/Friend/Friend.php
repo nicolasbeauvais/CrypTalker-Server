@@ -189,7 +189,7 @@ class Friend extends AbstractModels
      *
      * @return bool
      */
-    private function isFriend($user_id, $user_friend_id, $status = null)
+    public function isFriend($user_id, $user_friend_id, $status = null)
     {
         $query = DB::table('friends')
             ->where('user_id', '=', $user_id)
@@ -212,7 +212,7 @@ class Friend extends AbstractModels
      *
      * @return bool
      */
-    private function isFriendWaiting($user_id, $user_friend_id)
+    public function isFriendWaiting($user_id, $user_friend_id)
     {
         return DB::table('friends')
             ->where('user_id', '=', $user_id)
@@ -229,7 +229,7 @@ class Friend extends AbstractModels
      *
      * @return array
      */
-    private function getFriendShip($user_id, $user_friend_id)
+    public function getFriendShip($user_id, $user_friend_id)
     {
         $friendship = array();
 

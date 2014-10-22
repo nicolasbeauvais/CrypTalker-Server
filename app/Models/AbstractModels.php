@@ -152,6 +152,12 @@ abstract class AbstractModels
         }
     }
 
+    /**
+     * Generate a random string.
+     *
+     * @param int $length
+     * @return string
+     */
     protected function randomString($length = 10)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -162,5 +168,12 @@ abstract class AbstractModels
         }
 
         return $randomString;
+    }
+
+    public function getModel($name)
+    {
+        global $app;
+
+        return $app->make('Models\\' . $name . '\\' . $name);
     }
 } 

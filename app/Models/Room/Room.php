@@ -106,6 +106,69 @@ class Room extends AbstractModels
     }
 
     /**
+     * Add a user to the specified room.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     * @param $room_id
+     *
+     * @return array
+     */
+    public function add($user_id, $user_friend_id, $room_id)
+    {
+        $user_id = (int) $user_id;
+        $user_friend_id = (int) $user_friend_id;
+        $room_id = (int) $room_id;
+
+        $this->required('add', $user_id, $user_friend_id, $room_id);
+
+        if ($this->isInRoom($user_friend_id, $room_id)) {
+            $this->error(null, 'The user is already in the room');
+            return $this->response();
+        }
+
+        if (!$this->getModel('Friend')->isFriend($user_id, $room_id, 1)
+            || $this->getModel('Friend')->getFriendShip($user_id, $room_id)['blocked']) {
+            $this->error(null, 'You can\'t add a user to the room if it\'s not your friend');
+            return $this->response();
+        }
+
+        DB::table('user_room')->insert(array(
+            'user_id' => $user_friend_id,
+            'room_id' => $room_id,
+            'created_at' => date('Y-m-d H:i:s')
+        ));
+
+        return $this->response();
+    }
+
+    /**
+     * Remove a user to the specified room.
+     *
+     * @param $user_id
+     * @param $room_id
+     *
+     * @return array
+     */
+    public function quit($user_id, $room_id)
+    {
+        $room_id = (int) $room_id;
+
+        $this->required('quit', $room_id);
+
+        if (!$this->isInRoom($user_id, $room_id)) {
+            $this->error(null, 'You\'re not in this room');
+            return $this->response();
+        }
+
+        DB::table('user_room')
+            ->where(array('user_id' => $user_id, 'room_id' => $room_id))
+            ->delete();
+
+        return $this->response();
+    }
+
+    /**
      * Check if a user is in a room.
      *
      * @param $user_id

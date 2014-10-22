@@ -41,8 +41,8 @@ Login Parameters:
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
 | POST      | /api/rooms/create                 | Create a room                                  | Yes    | OK     |
 | POST      | /api/rooms/name                   | Add a name to the room                         | Yes    | OK     |
-| GET       | /api/rooms/add/:user_id/:room_id  | Add a user to the room                         | Yes    | TODO   |
-| GET       | /api/rooms/quit/:room_id          | Remove the user from the room                  | Yes    | TODO   |
+| GET       | /api/rooms/add/:user_id/:room_id  | Add a user to the room                         | Yes    | OK     |
+| GET       | /api/rooms/quit/:room_id          | Remove the user from the room                  | Yes    | OK     |
 
 Create Parameters:
 - `(array)` **users_id** *list of users id to create the chat room*

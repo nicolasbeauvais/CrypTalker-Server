@@ -47,4 +47,36 @@ class RoomController extends AbstractApiController
         return View::make('json', array('response' => $response));
     }
 
+    /**
+     * Add a user to the specified room.
+     *
+     * @param $user_friend_id
+     * @param $room_id
+     *
+     * @return mixed
+     */
+    public function getAdd($user_friend_id, $room_id)
+    {
+        $this->logged();
+
+        $response = $this->getRoom()->add(Auth::user()->id, $user_friend_id, $room_id);
+
+        return View::make('json', array('response' => $response));
+    }
+
+    /**
+     * Remove a user of the specified room.
+     *
+     * @param $room_id
+     *
+     * @return mixed
+     */
+    public function getQuit($room_id)
+    {
+        $this->logged();
+
+        $response = $this->getRoom()->quit(Auth::user()->id, $room_id);
+
+        return View::make('json', array('response' => $response));
+    }
 }
