@@ -13,7 +13,8 @@
 			"app/Controllers",
 			"app/Models",
 			"app/database/migrations",
-			"app/database/seeds"
+			"app/database/seeds",
+            "app/Cryptalker"
 		]
 	},
 	"scripts": {
