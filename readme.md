@@ -52,4 +52,6 @@ Name Parameters:
 - `(string)` **name** *name to give to the room*
 
 ### Message (Ratchet PHP websocket)
-TODO
+| HTTP verb | Route                             | Explanation                                    | Logged | Status |
+|:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
+| POST      | /api/messages/new                 | Send a message                                 | Yes    | OK     |

@@ -176,7 +176,7 @@ class Room extends AbstractModels
      *
      * @return bool
      */
-    private function isInRoom($user_id, $room_id)
+    public function isInRoom($user_id, $room_id)
     {
         return DB::table('user_room')
             ->where('user_id', '=', $user_id)

@@ -40,6 +40,14 @@ class AbstractController extends Controller
     }
 
     /**
+     * @return \Models\Message\Message
+     */
+    public function getMessage()
+    {
+        return $this->giveModel('Message');
+    }
+
+    /**
      * Instantiate a model class
      *
      * @param $name

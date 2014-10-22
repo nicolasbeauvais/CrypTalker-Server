@@ -70,8 +70,6 @@ class User extends AbstractModels
      */
     public function login($pseudoOrEmail, $password)
     {
-
-
         $isPseudo = false;
 
 
