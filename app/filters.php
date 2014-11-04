@@ -22,6 +22,12 @@ App::after(function($request, $response)
 	//
 });
 
+Route::filter('log_request', function()
+{
+    Log::info('[' . Request::method() . '] /' . Request::segment(1) . '/' .  Request::segment(2) . '/' .
+        Request::segment(3), array(Input::all()));
+});
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Filters

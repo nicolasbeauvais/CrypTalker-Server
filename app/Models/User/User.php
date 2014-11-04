@@ -16,14 +16,14 @@ class User extends AbstractModels
      * @param $email
      * @param $pseudo
      * @param $password
-     * @param $password_c
+     * @param $password_confirmation
      *
      * @return array
      */
-    public function register($email, $pseudo, $password, $password_c)
+    public function register($email, $pseudo, $password, $password_confirmation)
     {
         // test parameters
-        $this->required('register', $email, $pseudo, $password, $password_c);
+        $this->required('register', $email, $pseudo, $password, $password_confirmation);
 
         // Email full lowercase
         $email = strtolower($email);
@@ -38,7 +38,7 @@ class User extends AbstractModels
                 'email' => $email,
                 'pseudo' => $pseudo,
                 'password' => $password,
-                'password_confirmation' => $password_c
+                'password_confirmation' => $password_confirmation
             ));
 
             $this->parseValidation($validation);
