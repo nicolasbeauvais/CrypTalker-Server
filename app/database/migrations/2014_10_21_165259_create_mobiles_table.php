@@ -16,6 +16,7 @@ class CreateMobilesTable extends Migration {
             $table->increments('id');
             $table->integer('user_id');
             $table->string('mobile_id', 250);
+            $table->string('token', 70);
             $table->dateTime('created_at');
 
             $table->index('user_id');

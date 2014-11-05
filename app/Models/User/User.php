@@ -17,13 +17,14 @@ class User extends AbstractModels
      * @param $pseudo
      * @param $password
      * @param $password_confirmation
+     * @param $mobile_id
      *
      * @return array
      */
-    public function register($email, $pseudo, $password, $password_confirmation)
+    public function register($email, $pseudo, $password, $password_confirmation, $mobile_id)
     {
         // test parameters
-        $this->required('register', $email, $pseudo, $password, $password_confirmation);
+        $this->required('register', $email, $pseudo, $password, $password_confirmation, $mobile_id);
 
         // Email full lowercase
         $email = strtolower($email);
@@ -33,7 +34,8 @@ class User extends AbstractModels
             'email' => $email,
             'pseudo' => $pseudo,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
+            'mobile_id' => $mobile_id
         ));
 
         $this->parseValidation($validation);
@@ -45,12 +47,22 @@ class User extends AbstractModels
         if ($validation->validated) {
 
             // insert to DB
-            DB::table('users')->insert(array(
+            $user_id = DB::table('users')->insertGetId(array(
                 'email' => $email,
                 'pseudo' => $pseudo,
                 'password' => Hash::make($password),
                 'created_at' => date('Y-m-d H:i:s')
             ));
+
+            $token = $this->makeToken($email);
+            DB::table('mobiles')->insert(array(
+                'user_id' => $user_id,
+                'mobile_id' => $mobile_id,
+                'token' => $token,
+                'created_at' => date('Y-m-d H:i:s')
+            ));
+
+            $this->data('token', $token);
 
             $this->success();
         }
@@ -126,5 +138,16 @@ class User extends AbstractModels
         $pseudo = strtolower($pseudo);
 
         return DB::table('users')->where(DB::raw('LOWER(pseudo)'), '=', $pseudo)->first() === null ? false : true;
+    }
+
+    /**
+     * Create a user token from any string.
+     *
+     * @param $string
+     * @return string
+     */
+    private function makeToken($string)
+    {
+        return substr(sha1($string . microtime()), 0, 69);
     }
 }

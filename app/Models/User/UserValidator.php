@@ -24,7 +24,8 @@ class UserValidator extends AbstractValidator
     protected $register = array(
         'email' => 'required|email|unique:users',
         'pseudo' => 'required|alpha_dash|min:2|max:55',
-        'password' => 'required|min:4|max:55|confirmed'
+        'password' => 'required|min:4|max:55|confirmed',
+        'mobile_id' => 'required'
     );
 
     /**

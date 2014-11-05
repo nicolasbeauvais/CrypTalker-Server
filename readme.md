@@ -21,10 +21,14 @@ Register Parameters:
 - `(string)` **pseudo** *alpha_dash pseudo between 2 and 55 chars*
 - `(string)` **password** *password between 4 and 55 chars*
 - `(string)` **password_confirmation** *password confirmation*
+- `(string)` **mobile_id** *Google CLoud Messaging user<=>app id*
 
 Login Parameters:
 - `(string)` **pseudoOrEmail** *the user pseudo or email*
 - `(string)` **password** *the user valid password*
+- `(string)` **mobile_id** *Google CLoud Messaging user<=>app id*
+
+Register & Login return the a user remember token to store in the client app (on different token by user<=>app).
 
 ##### Info
 

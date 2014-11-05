@@ -20,6 +20,7 @@ class UserController extends AbstractApiController
      * $_POST['pseudo']
      * $_POST['password']
      * $_POST['password_confirmation']
+     * $_POST['mobile_id'] (Google Cloud Messaging id)
      *
      * @return mixed
      */
@@ -29,7 +30,8 @@ class UserController extends AbstractApiController
             Input::get('email'),
             Input::get('pseudo'),
             Input::get('password'),
-            Input::get('password_confirmation')
+            Input::get('password_confirmation'),
+            Input::get('mobile_id')
         );
 
         return View::make('json', array('response' => $response));
@@ -41,6 +43,7 @@ class UserController extends AbstractApiController
      * Requires:
      * $_POST['pseudoOrEmail']
      * $_POST['password']
+     * $_POST['mobile_id'] (Google Cloud Messaging id)
      *
      * @return mixed
      */
