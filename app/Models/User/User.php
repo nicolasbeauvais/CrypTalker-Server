@@ -28,33 +28,31 @@ class User extends AbstractModels
         // Email full lowercase
         $email = strtolower($email);
 
-        // check pseudo
+        // check
+        $validation = $this->validate('register', array(
+            'email' => $email,
+            'pseudo' => $pseudo,
+            'password' => $password,
+            'password_confirmation' => $password_confirmation
+        ));
+
+        $this->parseValidation($validation);
+
         if ($this->isPseudoExist($pseudo)) {
             $this->error('pseudo', 'Pseudo already exist');
-        } else {
+        }
 
-            // check password
-            $validation = $this->validate('register', array(
+        if ($validation->validated) {
+
+            // insert to DB
+            DB::table('users')->insert(array(
                 'email' => $email,
                 'pseudo' => $pseudo,
-                'password' => $password,
-                'password_confirmation' => $password_confirmation
+                'password' => Hash::make($password),
+                'created_at' => date('Y-m-d H:i:s')
             ));
 
-            $this->parseValidation($validation);
-
-            if ($validation->validated) {
-
-                // insert to DB
-                DB::table('users')->insert(array(
-                    'email' => $email,
-                    'pseudo' => $pseudo,
-                    'password' => Hash::make($password),
-                    'created_at' => date('Y-m-d H:i:s')
-                ));
-
-                $this->success();
-            }
+            $this->success();
         }
 
         return $this->response();

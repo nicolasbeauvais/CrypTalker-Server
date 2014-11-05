@@ -63,6 +63,9 @@ abstract class AbstractModels
         $errors = $validation->errors->getMessages();
 
         foreach ($errors as $key => $error) {
+            if (is_array($error)) {
+                $error = $error[0];
+            }
             $this->error($key, $error);
         }
     }

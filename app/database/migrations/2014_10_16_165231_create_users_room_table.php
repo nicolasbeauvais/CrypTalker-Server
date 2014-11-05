@@ -16,6 +16,7 @@ class CreateUsersRoomTable extends Migration {
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('room_id');
+            $table->integer('status');
             $table->dateTime('created_at');
 
             // Indexes

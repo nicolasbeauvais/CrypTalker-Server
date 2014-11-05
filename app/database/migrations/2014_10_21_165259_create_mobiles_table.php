@@ -17,6 +17,9 @@ class CreateMobilesTable extends Migration {
             $table->integer('user_id');
             $table->string('mobile_id', 250);
             $table->dateTime('created_at');
+
+            $table->index('user_id');
+            $table->index('mobile_id');
         });
     }
 

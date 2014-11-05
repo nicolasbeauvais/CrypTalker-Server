@@ -16,6 +16,7 @@ class CreateRoomsTable extends Migration {
             $table->increments('id');
             $table->string('name', 255);
             $table->text('key');
+            $table->integer('main');
             $table->dateTime('created_at');
         });
     }

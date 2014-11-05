@@ -14,8 +14,9 @@ class CreateUsersTable extends Migration {
     {
         Schema::create('users', function($table) {
             $table->increments('id');
+            $table->string('email', 255);
             $table->string('pseudo', 55);
-            $table->string('password', 55);
+            $table->string('password', 70);
             $table->dateTime('created_at');
 
             // Indexes
