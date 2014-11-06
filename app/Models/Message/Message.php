@@ -25,7 +25,7 @@ class Message extends AbstractModels
             $this->error(null, 'You\'re not in this room');
         }
 
-        // Send message to push cloud
+        //@TODO: Send message to Google Cloud Messaging
 
         return $this->response();
     }

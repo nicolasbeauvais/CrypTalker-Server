@@ -22,6 +22,13 @@ App::after(function($request, $response)
 	//
 });
 
+Route::filter('json', function()
+{
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+    header('Content-type: application/json');
+});
+
 Route::filter('log_request', function()
 {
     Log::info('[' . Request::method() . '] /' . Request::segment(1) . '/' .  Request::segment(2) . '/' .

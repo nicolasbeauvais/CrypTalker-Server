@@ -75,13 +75,13 @@ class User extends AbstractModels
      *
      * @param $pseudoOrEmail
      * @param $password
+     * @param $mobile_id
      *
      * @return array
      */
-    public function login($pseudoOrEmail, $password)
+    public function login($pseudoOrEmail, $password, $mobile_id)
     {
         $isPseudo = false;
-
 
         // If it's not an email, we check directly the pseudo
         if (strpos($pseudoOrEmail, '@') == -1 && !$this->isPseudoExist($pseudoOrEmail)) {
@@ -117,8 +117,60 @@ class User extends AbstractModels
             $this->error('password', 'Bad pseudo/password combination');
         } else {
             Auth::loginUsingId($user->id);
+
+            // Create token
+            $token = $this->makeToken($pseudoOrEmail);
+
+            // Already a token for this phone ?
+            $tokenExist = DB::table('mobiles')
+                ->where('user_id', '=', $user->id)
+                ->where('mobile_id', '=', $mobile_id, 'AND')
+                ->first();
+
+            // Update if exist, else create
+            if ($tokenExist) {
+                DB::table('mobiles')
+                    ->where('user_id', '=', $user->id)
+                    ->where('mobile_id', '=', $mobile_id, 'AND')
+                    ->update(array('token' => $token));
+            } else {
+                DB::table('mobiles')->insert(array(
+                    'user_id' => $user->id,
+                    'mobile_id' => $mobile_id,
+                    'token' => $token,
+                    'created_at' => date('Y-m-d H:i:s')
+                ));
+            }
+
+            $this->data('token', $token);
+
             $this->success();
         }
+
+        return $this->response();
+    }
+
+    public function loginWithToken($user_id, $token)
+    {
+        $this->required('loginWithToken', $user_id, $token);
+
+        $validToken = DB::table('mobiles')
+            ->where('user_id', '=', $user_id)
+            ->where('token', '=', $token, 'AND')
+            ->first();
+
+        if ($validToken) {
+            Auth::loginUsingId($user_id);
+        } else {
+            $this->error('token', 'Bad token');
+        }
+
+        return $this->response();
+    }
+
+    public function logout()
+    {
+        Auth::logout();
 
         return $this->response();
     }
