@@ -69,10 +69,7 @@ class UserController extends AbstractApiController
      */
     public function postLoginWithToken()
     {
-        $response = $this->getUser()->loginWithToken(
-            Input::get('user_id'),
-            Input::get('token')
-        );
+        $response = $this->getUser()->loginWithToken(Input::get('token'));
 
         return View::make('json', array('response' => $response));
     }

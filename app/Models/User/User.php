@@ -53,6 +53,8 @@ class User extends AbstractModels
                 'created_at' => date('Y-m-d H:i:s')
             ));
 
+            Auth::loginUsingId($user_id);
+
             $token = $this->makeToken($email);
             DB::table('mobiles')->insert(array(
                 'user_id' => $user_id,
@@ -110,7 +112,7 @@ class User extends AbstractModels
                 ->first();
         }
 
-        if (!Hash::check($password, $user->password)) {
+        if (!$user || !Hash::check($password, $user->password)) {
             $this->error('password', 'Bad pseudo/password combination');
         } else {
             Auth::loginUsingId($user->id);
@@ -145,17 +147,21 @@ class User extends AbstractModels
         return $this->response();
     }
 
-    public function loginWithToken($user_id, $token)
+    public function loginWithToken($token)
     {
-        $this->required('loginWithToken', $user_id, $token);
+        if (!Auth::check()) {
+            $this->error('token', 'Bad token');
+        }
 
-        $validToken = DB::table('mobiles')
-            ->where('user_id', '=', $user_id)
-            ->where('token', '=', $token, 'AND')
+        $this->required('loginWithToken', $token);
+
+        $isTokenOk = DB::table('mobiles')
+            ->where('token', '=', $token)
+            ->pluck('user_id', '=', Auth::user()->id, 'AND')
             ->first();
 
-        if ($validToken) {
-            Auth::loginUsingId($user_id);
+        if ($isTokenOk) {
+            Auth::loginUsingId(Auth::user()->id);
         } else {
             $this->error('token', 'Bad token');
         }

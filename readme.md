@@ -14,7 +14,7 @@ Post request data are explained in the post parameters section of this readme.
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
 | POST      | /api/users/register               | Register a user to the app                     | No     | OK     |
 | POST      | /api/users/login                  | Log a user to the app with is pseudo or email  | No     | OK     |
-| POST      | /api/users/loginWithToken         | Log a user to the app with is id and token     | No     | OK     |
+| POST      | /api/users/login-with-token       | Log a user to the app with is id and token     | No     | OK     |
 | GET       | /api/users/logout                 | Logout a user                                  | Yes    | OK     |
 | GET       | /api/users/info/:user_id          | Get all the info for a specified user          | Yes    | TODO   |
 
@@ -31,7 +31,6 @@ Login Parameters:
 - `(string)` **mobile_id** *Google CLoud Messaging user<=>app id*
 
 LoginWithToken Parameters:
-- `(int)` **user_id** *The user's id*
 - `(string)` **token** *The user remember token*
 
 Register & Login return a user remember token to store in the client app (One different token by user<=>app).
