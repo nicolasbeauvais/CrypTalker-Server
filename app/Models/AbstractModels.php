@@ -71,11 +71,6 @@ abstract class AbstractModels
         }
     }
 
-    protected function success()
-    {
-        $this->errors['success'] = true;
-    }
-
     /**
      * Generic answer to return to the view.
      *
@@ -90,7 +85,7 @@ abstract class AbstractModels
         );
 
         $response = array(
-            'data' => $this->data,
+            'data' => empty($this->data) ? new stdClass : $this->data,
             'success' => $errors['errno'] === 200 ? true : false,
             'errors' => $errors
         );

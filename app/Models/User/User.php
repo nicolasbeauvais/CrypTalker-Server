@@ -42,9 +42,8 @@ class User extends AbstractModels
 
         if ($this->isPseudoExist($pseudo)) {
             $this->error('pseudo', 'Pseudo already exist');
-        }
 
-        if ($validation->validated) {
+        } elseif ($validation->validated) {
 
             // insert to DB
             $user_id = DB::table('users')->insertGetId(array(
@@ -63,8 +62,6 @@ class User extends AbstractModels
             ));
 
             $this->data('token', $token);
-
-            $this->success();
         }
 
         return $this->response();
@@ -143,8 +140,6 @@ class User extends AbstractModels
             }
 
             $this->data('token', $token);
-
-            $this->success();
         }
 
         return $this->response();
