@@ -147,21 +147,18 @@ class User extends AbstractModels
         return $this->response();
     }
 
-    public function loginWithToken($token)
+    public function loginWithToken($mobile_id, $token)
     {
-        if (!Auth::check()) {
-            $this->error('token', 'Bad token');
-        }
-
         $this->required('loginWithToken', $token);
 
-        $isTokenOk = DB::table('mobiles')
+        $mobile = DB::table('mobiles')
             ->where('token', '=', $token)
-            ->pluck('user_id', '=', Auth::user()->id, 'AND')
+            ->where('mobile_id', '=', $mobile_id, 'AND')
             ->first();
 
-        if ($isTokenOk) {
-            Auth::loginUsingId(Auth::user()->id);
+        if ($mobile) {
+            Auth::loginUsingId($mobile->user_id);
+            $this->data('token', $token);
         } else {
             $this->error('token', 'Bad token');
         }

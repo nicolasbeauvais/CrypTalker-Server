@@ -31,6 +31,7 @@ Login Parameters:
 - `(string)` **mobile_id** *Google CLoud Messaging user<=>app id*
 
 LoginWithToken Parameters:
+- `(string)` **mobile_id** *Google CLoud Messaging user<=>app id*
 - `(string)` **token** *The user remember token*
 
 Register & Login return a user remember token to store in the client app (One different token by user<=>app).

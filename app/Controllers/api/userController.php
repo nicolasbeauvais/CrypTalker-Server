@@ -62,14 +62,14 @@ class UserController extends AbstractApiController
      * Log a user to the app with is id and token.
      *
      * Requires:
-     * $_POST['user_id']
+     * $_POST['mobile_id']
      * $_POST['token']
      *
      * @return mixed
      */
     public function postLoginWithToken()
     {
-        $response = $this->getUser()->loginWithToken(Input::get('token'));
+        $response = $this->getUser()->loginWithToken(Input::get('mobile_id'), Input::get('token'));
 
         return View::make('json', array('response' => $response));
     }

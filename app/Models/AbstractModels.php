@@ -80,7 +80,7 @@ abstract class AbstractModels
     {
         // handle errors
         $errors = array(
-            'messages' => $this->errors,
+            'messages' => empty($this->errors) ? new stdClass : $this->errors,
             'errno' => count($this->errors) ? 400 : 200
         );
 
