@@ -15,13 +15,14 @@ class FriendController extends AbstractApiController
     /**
      * Make a friend request for the authenticated user.
      *
-     * @param int $user_friend_id
+     * Requires:
+     * $_POST['pseudo']
      */
-    public function getRequest($user_friend_id)
+    public function postRequest()
     {
         $this->logged();
 
-        $response = $this->getFriend()->request(Auth::user()->id, $user_friend_id);
+        $response = $this->getFriend()->request(Auth::user()->id, Input::get('pseudo'));
 
         return View::make('json', array('response' => $response));
     }

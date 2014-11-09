@@ -16,32 +16,33 @@ class Friend extends AbstractModels
      * Make a friend request for the authenticated user.
      *
      * @param $user_id
-     * @param $user_friend_id
+     * @param $pseudo
      *
      * @return array
      */
-    public function request($user_id, $user_friend_id)
+    public function request($user_id, $pseudo)
     {
         $user_id = (int)$user_id;
-        $user_friend_id = (int)$user_friend_id;
 
-        $this->required('request', $user_id, $user_friend_id);
+        $this->required('request', $user_id, $pseudo);
+
+        $user_friend = $this->getByPseudo($pseudo);
 
         // What ?
-        if ($user_id === $user_friend_id) {
+        if ($user_id === $user_friend->id) {
             $this->error(null, 'You can\'t be friend with yourself');
             return $this->response();
         }
 
         // Already friend
-        if ($this->isFriend($user_id, $user_friend_id)) {
+        if ($this->isFriend($user_id, $user_friend->id)) {
             $this->error('user_friend_id', 'You are already friend with this user');
             return $this->response();
         }
 
         DB::table('friends')->insert(array(
             'user_id' => $user_id,
-            'user_friend_id' => $user_friend_id,
+            'user_friend_id' => $user_friend->id,
             'status' => 0,
             'created_at' => date('Y-m-d H:i:s')
         ));
@@ -250,5 +251,22 @@ class Friend extends AbstractModels
         $friendship['blocked'] = ($friendship['user']->status == -1 || $friendship['user']->status == -1);
 
         return  $friendship;
+    }
+
+    /**
+     * Get a user by pseudo (not case sensitive)
+     *
+     * @param $pseudo
+     * @return bool
+     */
+    private function getByPseudo($pseudo)
+    {
+        if (!$pseudo) {
+            return false;
+        }
+
+        $pseudo = strtolower($pseudo);
+
+        return DB::table('users')->where(DB::raw('LOWER(pseudo)'), '=', $pseudo)->first();
     }
 }

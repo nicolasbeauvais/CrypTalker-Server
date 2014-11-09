@@ -40,10 +40,13 @@ Register & Login return a user remember token to store in the client app (One di
 
 | HTTP verb | Route                             | Explanation                                    | Logged | Status |
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|:------:|
-| GET       | /api/friends/request/:user_id     | Make a friend request                          | Yes    | OK     |
+| POST      | /api/friends/request/             | Make a friend request                          | Yes    | OK     |
 | GET       | /api/friends/accept/:user_id      | Validate a friend invite                       | Yes    | OK     |
 | GET       | /api/friends/block/:user_id       | Block a friend                                 | Yes    | OK     |
 | GET       | /api/friends/unblock/:user_id     | Unblock a friend                               | Yes    | OK     |
+
+Request Parameters:
+- `(string)` **pseudo** *Alpha_dash pseudo between 2 and 55 chars*
 
 ### Rooms
 
