@@ -28,15 +28,21 @@ class Friend extends AbstractModels
 
         $user_friend = $this->getByPseudo($pseudo);
 
+        // Pseudo doesn't exist
+        if (!$user_friend) {
+            $this->error('pseudo', 'There is no user with the pseudo ' . $pseudo);
+            return $this->response();
+        }
+
         // What ?
-        if ($user_id === $user_friend->id) {
-            $this->error(null, 'You can\'t be friend with yourself');
+        if ($user_id === (int)$user_friend->id) {
+            $this->error('pseudo', 'You can\'t be friend with yourself');
             return $this->response();
         }
 
         // Already friend
         if ($this->isFriend($user_id, $user_friend->id)) {
-            $this->error('user_friend_id', 'You are already friend with this user');
+            $this->error('pseudo', 'You are already friend with this user');
             return $this->response();
         }
 

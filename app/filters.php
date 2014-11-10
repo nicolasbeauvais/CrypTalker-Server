@@ -19,7 +19,7 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-    Log::info($response->getContent());
+    //
 });
 
 Route::filter('json', function()
