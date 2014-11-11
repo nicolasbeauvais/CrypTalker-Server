@@ -80,6 +80,9 @@ class User extends AbstractModels
      */
     public function login($pseudoOrEmail, $password, $mobile_id)
     {
+        // test parameters
+        $this->required('login', $pseudoOrEmail, $password, $mobile_id);
+
         $isPseudo = false;
 
         // If it's not an email, we check directly the pseudo

@@ -2,8 +2,9 @@
 
 namespace Controllers\Api;
 
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class UserController
@@ -34,7 +35,7 @@ class UserController extends AbstractApiController
             Input::get('mobile_id')
         );
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
     }
 
     /**
@@ -55,7 +56,7 @@ class UserController extends AbstractApiController
             Input::get('mobile_id')
         );
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
     }
 
     /**
@@ -71,7 +72,7 @@ class UserController extends AbstractApiController
     {
         $response = $this->getUser()->loginWithToken(Input::get('mobile_id'), Input::get('token'));
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
     }
 
     public function getLogout ()

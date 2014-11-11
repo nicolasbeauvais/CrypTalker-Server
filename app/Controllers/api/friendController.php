@@ -2,7 +2,7 @@
 
 namespace Controllers\Api;
 
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +24,7 @@ class FriendController extends AbstractApiController
 
         $response = $this->getFriend()->request(Auth::user()->id, Input::get('pseudo'));
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
     }
 
     /**
@@ -38,7 +38,7 @@ class FriendController extends AbstractApiController
 
         $response = $this->getFriend()->accept(Auth::user()->id, $user_friend_id);
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
     }
 
     /**
@@ -52,7 +52,7 @@ class FriendController extends AbstractApiController
 
         $response = $this->getFriend()->block(Auth::user()->id, $user_friend_id);
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
     }
 
     /**
@@ -66,6 +66,6 @@ class FriendController extends AbstractApiController
 
         $response = $this->getFriend()->unblock(Auth::user()->id, $user_friend_id);
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
     }
 }
