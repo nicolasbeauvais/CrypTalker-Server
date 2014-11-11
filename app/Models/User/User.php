@@ -176,6 +176,35 @@ class User extends AbstractModels
         return $this->response();
     }
 
+    public function info($user_id)
+    {
+        $response = array();
+
+        $response['friend_request_received'] = DB::table('friends')
+            ->select(
+                'users.id',
+                'users.pseudo'
+            )
+            ->join('users', 'users.id', '=', 'friends.user_id')
+            ->where('friends.user_friend_id', '=', $user_id)
+            ->where('friends.status', '=', 0)
+            ->get();
+
+        $response['friend_request_send'] = DB::table('friends')
+            ->select(
+                'users.id',
+                'users.pseudo'
+            )
+            ->join('users', 'users.id', '=', 'friends.user_friend_id')
+            ->where('friends.user_id', '=', $user_id)
+            ->where('friends.status', '=', 0)
+            ->get();
+
+        $this->data($response);
+
+        return $this->response();
+    }
+
     /**
      * Verify if a pseudo already exist (not case sensitive)
      *

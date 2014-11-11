@@ -81,6 +81,15 @@ class UserController extends AbstractApiController
 
         $response = $this->getUser()->logout();
 
-        return View::make('json', array('response' => $response));
+         return Response::json($response);
+    }
+
+    public function getInfo()
+    {
+        $this->logged();
+
+        $response = $this->getUser()->info(Auth::user()->id);
+
+         return Response::json($response);
     }
 }
