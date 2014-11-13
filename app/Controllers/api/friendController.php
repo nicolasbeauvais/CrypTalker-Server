@@ -17,6 +17,8 @@ class FriendController extends AbstractApiController
      *
      * Requires:
      * $_POST['pseudo']
+     *
+     *  @return mixed
      */
     public function postRequest()
     {
@@ -31,6 +33,8 @@ class FriendController extends AbstractApiController
      * Accept a friend request for the authenticated user.
      *
      * @param $user_friend_id
+     *
+     *  @return mixed
      */
     public function getAccept($user_friend_id)
     {
@@ -45,6 +49,8 @@ class FriendController extends AbstractApiController
      * Block a friend for the authenticated user.
      *
      * @param $user_friend_id
+     *
+     *  @return mixed
      */
     public function getBlock($user_friend_id)
     {
@@ -59,6 +65,8 @@ class FriendController extends AbstractApiController
      * Unblock a friend for the authenticated user.
      *
      * @param $user_friend_id
+     *
+     *  @return mixed
      */
     public function getUnblock($user_friend_id)
     {
