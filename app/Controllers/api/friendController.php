@@ -46,6 +46,22 @@ class FriendController extends AbstractApiController
     }
 
     /**
+     * Deny a friend request for the authenticated user.
+     *
+     * @param $user_friend_id
+     *
+     *  @return mixed
+     */
+    public function getDeny($user_friend_id)
+    {
+        $this->logged();
+
+        $response = $this->getFriend()->deny(Auth::user()->id, $user_friend_id);
+
+        return Response::json($response);
+    }
+
+    /**
      * Block a friend for the authenticated user.
      *
      * @param $user_friend_id

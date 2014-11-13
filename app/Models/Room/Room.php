@@ -4,9 +4,6 @@ namespace Models\Room;
 
 use Models\AbstractModels;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Exception;
 
 /**
  * Class Room
@@ -19,14 +16,15 @@ class Room extends AbstractModels
      *
      * @param $user_id
      * @param $users_friend_id
+     * @param $isMain
      *
      * @return array
      */
-    public function create($user_id, $users_friend_id)
+    public function create($user_id, $users_friend_id, $isMain = false)
     {
         $user_id = (int) $user_id;
 
-        $this->required('create', $users_friend_id);
+        $this->required('create', $user_id, $users_friend_id);
 
         $users_friend_id_verified = array();
         foreach ($users_friend_id as $id) {
@@ -48,6 +46,7 @@ class Room extends AbstractModels
         $room_id = DB::table('rooms')->insertGetId(array(
             'name' => '',
             'key' => $this->randomString(40),
+            'main' => $isMain ? 1 : 0,
             'created_at' => date('Y-m-d H:i:s')
         ));
 
@@ -143,7 +142,7 @@ class Room extends AbstractModels
     }
 
     /**
-     * Remove a user to the specified room.
+     * Remove a user from the specified room.
      *
      * @param $user_id
      * @param $room_id

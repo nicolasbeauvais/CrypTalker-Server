@@ -42,6 +42,7 @@ Register & Login return a user remember token to store in the client app (One di
 |:----------|:----------------------------------|:-----------------------------------------------|:------:|
 | POST      | /api/friends/request/             | Make a friend request                          | Yes    |
 | GET       | /api/friends/accept/:user_id      | Validate a friend invite                       | Yes    |
+| GET       | /api/friends/deny/:user_id        | Deny a friend invite                           | Yes    |
 | GET       | /api/friends/block/:user_id       | Block a friend                                 | Yes    |
 | GET       | /api/friends/unblock/:user_id     | Unblock a friend                               | Yes    |
 

@@ -73,28 +73,66 @@ class Friend extends AbstractModels
 
         // What ?
         if ($user_id === $user_friend_id) {
-            $this->error(null, 'You can\'t validate a friend request with yourself');
+            $this->error(null, 'You can\'t accept a friend request with yourself');
             return $this->response();
         }
 
         // No pending invitation
-        if (!$this->isFriendWaiting($user_id, $user_friend_id)) {
+        if (!$this->isFriendWaiting($user_friend_id, $user_id)) {
             $this->error('user_friend_id', 'You don\'t have a pending invitation request with this user');
             return $this->response();
         }
 
         // They are now friend
         DB::table('friends')
-            ->where('user_id', '=', $user_id)
-            ->where('user_friend_id', '=', $user_friend_id, 'AND')
+            ->where('user_id', '=', $user_friend_id)
+            ->where('user_friend_id', '=', $user_id, 'AND')
             ->update(array('status' => 1));
 
         DB::table('friends')->insert(array(
-            'user_id' => $user_friend_id,
-            'user_friend_id' => $user_id,
+            'user_id' => $user_id,
+            'user_friend_id' => $user_friend_id,
             'status' => 1,
             'created_at' => date('Y-m-d H:i:s')
         ));
+
+        $this->getModel('Room')->create($user_id, (array)$user_friend_id, true);
+
+        return $this->response();
+    }
+
+    /**
+     * Deny a friend request for the authenticated user.
+     *
+     * @param $user_id
+     * @param $user_friend_id
+     *
+     * @return array
+     */
+    public function deny($user_id, $user_friend_id)
+    {
+        $user_id = (int)$user_id;
+        $user_friend_id = (int)$user_friend_id;
+
+        $this->required('deny', $user_id, $user_friend_id);
+
+        // What ?
+        if ($user_id === $user_friend_id) {
+            $this->error(null, 'You can\'t deny a friend request with yourself');
+            return $this->response();
+        }
+
+        // No pending invitation
+        if (!$this->isFriendWaiting($user_friend_id, $user_id)) {
+            $this->error('user_friend_id', 'You don\'t have a pending invitation request with this user');
+            return $this->response();
+        }
+
+        // Simply delete the request
+        DB::table('friends')
+            ->where('user_id', '=', $user_friend_id)
+            ->where('user_friend_id', '=', $user_id, 'AND')
+            ->delete();
 
         return $this->response();
     }
