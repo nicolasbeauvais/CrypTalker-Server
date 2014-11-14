@@ -50,6 +50,7 @@ class Room extends AbstractModels
             'created_at' => date('Y-m-d H:i:s')
         ));
 
+        // Add each users to the room
         $user_room = array();
         $users_friend_id_verified[] = $user_id;
         foreach ($users_friend_id_verified as $id) {
@@ -82,6 +83,7 @@ class Room extends AbstractModels
 
         $this->required('create', $user_id, $room_id, $name);
 
+        // You can't name a room if you're not into it
         if (!$this->isInRoom($user_id, $room_id)) {
             $this->error(null, 'You must be in the room to change the room\'s name');
             return $this->response();
@@ -95,6 +97,7 @@ class Room extends AbstractModels
             return $this->response();
         }
 
+        // Update the room's name
         DB::table('rooms')
             ->where('id', '=', $room_id)
             ->update(array(
@@ -121,17 +124,20 @@ class Room extends AbstractModels
 
         $this->required('add', $user_id, $user_friend_id, $room_id);
 
+        // The user is already in the room
         if ($this->isInRoom($user_friend_id, $room_id)) {
             $this->error(null, 'The user is already in the room');
             return $this->response();
         }
 
+        // Their is no friendship between the users
         if (!$this->getModel('Friend')->isFriend($user_id, $room_id, 1)
             || $this->getModel('Friend')->getFriendShip($user_id, $room_id)['blocked']) {
             $this->error(null, 'You can\'t add a user to the room if it\'s not your friend');
             return $this->response();
         }
 
+        // Add the user to the room
         DB::table('user_room')->insert(array(
             'user_id' => $user_friend_id,
             'room_id' => $room_id,
@@ -155,8 +161,19 @@ class Room extends AbstractModels
 
         $this->required('quit', $room_id);
 
+        // You can't quit a room if you're not in it
         if (!$this->isInRoom($user_id, $room_id)) {
             $this->error(null, 'You\'re not in this room');
+            return $this->response();
+        }
+
+        // You can't qui a main room
+        $isMain = DB::table('user_room')
+            ->where(array('user_id' => $user_id, 'room_id' => $room_id))
+            ->pluck('main');
+
+        if ($isMain) {
+            $this->error(null, 'You can\'t quit a main room');
             return $this->response();
         }
 

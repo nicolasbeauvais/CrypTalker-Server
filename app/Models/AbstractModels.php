@@ -149,9 +149,7 @@ abstract class AbstractModels
                 $this->error($methodParams[$key]->getName(), 'Missing parameter ' . $methodParams[$key]->getName());
             }
 
-            // faire dans base controlleur une fonction qui gere la vue de ce retour.
-            \Controllers\Api\AbstractApiController::answerJson($this->response());
-
+            AbstractApiController::answerJson($this->response());
         }
     }
 
