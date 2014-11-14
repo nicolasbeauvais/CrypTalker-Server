@@ -22,6 +22,18 @@ App::after(function($request, $response)
     Log::info($response->getContent());
 });
 
+App::missing(function($exception)
+{
+    return Response::json(array(
+            'data' => new stdClass,
+            'success' => false,
+            'errors' => array(
+                'messages' => array('api' => 'Not found'),
+                'errno' => 404
+            )
+    ));
+});
+
 Route::filter('log_request', function()
 {
     Log::info('[' . Request::method() . '] /' . Request::segment(1) . '/' .  Request::segment(2) . '/' .
