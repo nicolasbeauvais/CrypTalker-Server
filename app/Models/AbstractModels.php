@@ -2,6 +2,8 @@
 
 namespace Models;
 
+use Controllers\Api\AbstractApiController;
+use Cryptalker\ModelAccessor;
 use Exception;
 use ReflectionMethod;
 use stdClass;
@@ -9,6 +11,8 @@ use Response;
 
 abstract class AbstractModels
 {
+    use ModelAccessor;
+
     /**
      * Contain all errors for the MessageBag.
      * @var array
