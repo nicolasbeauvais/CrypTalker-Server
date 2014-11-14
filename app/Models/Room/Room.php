@@ -89,6 +89,12 @@ class Room extends AbstractModels
             return $this->response();
         }
 
+        // You can't name a main room
+        if ($this->isMain($user_id, $room_id)) {
+            $this->error(null, 'You can\'t change a main room\'s name');
+            return $this->response();
+        }
+
         $validation = $this->validate('name', array('name' => $name));
 
         $this->parseValidation($validation);
@@ -137,12 +143,28 @@ class Room extends AbstractModels
             return $this->response();
         }
 
-        // Add the user to the room
-        DB::table('user_room')->insert(array(
-            'user_id' => $user_friend_id,
-            'room_id' => $room_id,
-            'created_at' => date('Y-m-d H:i:s')
-        ));
+        // If you add somebody to a main room, we create a new one.
+        if ($this->isMain($user_id, $room_id)) {
+
+            // Get the third weel
+            $third_wheel_id = DB::table('user_room')
+                ->where('user_room.room_id', '=', $room_id)
+                ->where('user_room.user_id', '!=', $user_id, 'AND')
+                ->pluck('user_id');
+
+            $user_friend_ids = array($user_friend_id, $third_wheel_id);
+
+            $this->create($user_id, $user_friend_ids);
+
+        } else {
+
+            // Add the user to the room
+            DB::table('user_room')->insert(array(
+                'user_id' => $user_friend_id,
+                'room_id' => $room_id,
+                'created_at' => date('Y-m-d H:i:s')
+            ));
+        }
 
         return $this->response();
     }
@@ -168,11 +190,7 @@ class Room extends AbstractModels
         }
 
         // You can't qui a main room
-        $isMain = DB::table('user_room')
-            ->where(array('user_id' => $user_id, 'room_id' => $room_id))
-            ->pluck('main');
-
-        if ($isMain) {
+        if ($this->isMain($user_id, $room_id)) {
             $this->error(null, 'You can\'t quit a main room');
             return $this->response();
         }
@@ -198,5 +216,12 @@ class Room extends AbstractModels
             ->where('user_id', '=', $user_id)
             ->where('room_id', '=', $room_id, 'AND')
             ->first() === null ? false : true;
+    }
+
+    private function isMain($user_id, $room_id)
+    {
+        return DB::table('user_room')
+            ->where(array('user_id' => $user_id, 'room_id' => $room_id))
+            ->pluck('main') === 0 ? false : true;
     }
 }
