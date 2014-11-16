@@ -203,19 +203,26 @@ class User extends AbstractModels
             ->select('rooms.id')
             ->join('rooms', 'rooms.id', '=', 'user_room.room_id')
             ->where('user_room.user_id', '=', $user_id)
-            ->get();
+            ->lists('rooms.id');
 
         $response['rooms'] = DB::table('rooms')
             ->select(
-                'users.id as user_id',
-                'users.pseudo',
+                DB::raw('GROUP_CONCAT(users.pseudo) as pseudos'),
                 'rooms.id as room_id',
                 'rooms.name'
             )
             ->join('user_room', 'rooms.id', '=', 'user_room.room_id')
             ->join('users', 'users.id', '=', 'user_room.user_id')
-            ->whereIn('rooms.id', '=', $rooms_id)
+            ->whereIn('rooms.id', (array)$rooms_id)
+            ->where('users.id', '!=', $user_id)
+            ->groupBy('rooms.id')
             ->get();
+
+        foreach ($response['rooms'] as $k => $v) {
+
+            $response['rooms'][$k]->name = empty($v->name) ?
+                $response['rooms'][$k]->pseudos : $response['rooms'][$k]->name;
+        }
 
         $this->data($response);
 
