@@ -52,11 +52,11 @@ class FriendController extends AbstractApiController
      *
      *  @return mixed
      */
-    public function getDeny($user_friend_id)
+    public function getRefuse($user_friend_id)
     {
         $this->logged();
 
-        $response = $this->getFriend()->deny(Auth::user()->id, $user_friend_id);
+        $response = $this->getFriend()->refuse(Auth::user()->id, $user_friend_id);
 
         return Response::json($response);
     }

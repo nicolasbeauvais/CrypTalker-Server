@@ -109,7 +109,7 @@ class Friend extends AbstractModels
      *
      * @return array
      */
-    public function deny($user_id, $user_friend_id)
+    public function refuse($user_id, $user_friend_id)
     {
         $user_id = (int)$user_id;
         $user_friend_id = (int)$user_friend_id;
