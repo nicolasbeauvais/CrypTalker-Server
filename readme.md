@@ -72,4 +72,4 @@ Name Parameters:
 
 New Parameters:
 - `(int)` **room_id** *The id of the room to send the message*
-- `(string)` **message** *name to give to the room*
+- `(string)` **message** *Message text content*

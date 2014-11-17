@@ -4,6 +4,7 @@ namespace Controllers\Api;
 
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class MessageController
