@@ -179,6 +179,15 @@ class User extends AbstractModels
     {
         $response = array();
 
+        $response['user'] = DB::table('users')
+            ->select(
+                'users.id',
+                'users.email',
+                'users.pseudo'
+            )
+            ->where('users.id', '=', $user_id)
+            ->first();
+
         $response['friend_request_received'] = DB::table('friends')
             ->select(
                 'users.id',
@@ -208,7 +217,7 @@ class User extends AbstractModels
         $response['rooms'] = DB::table('rooms')
             ->select(
                 DB::raw('GROUP_CONCAT(users.pseudo) as pseudos'),
-                'rooms.id as room_id',
+                'rooms.id as id',
                 'rooms.name'
             )
             ->join('user_room', 'rooms.id', '=', 'user_room.room_id')
