@@ -26,8 +26,18 @@ class MessageController extends AbstractApiController
     {
         $this->logged();
 
-        $response = $this->getMessage()->newMessage(Auth::user()->id, Input::get('room_id'), Input::get('message'));
+        $response = $this->getMessage()->newMessage(
+            Auth::user()->id,
+            Auth::user()->pseudo,
+            Input::get('room_id'),
+            Input::get('message')
+        );
 
          return Response::json($response);
+    }
+
+    public function getTest()
+    {
+        $this->getMessage()->test();
     }
 }

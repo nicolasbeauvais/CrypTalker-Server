@@ -6,6 +6,7 @@ use Models\AbstractModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use stdClass;
 
 class User extends AbstractModels
 {
@@ -214,6 +215,8 @@ class User extends AbstractModels
             ->where('user_room.user_id', '=', $user_id)
             ->lists('rooms.id');
 
+        $rooms_id = empty($rooms_id) ? array(0) : $rooms_id;
+
         $response['rooms'] = DB::table('rooms')
             ->select(
                 DB::raw('GROUP_CONCAT(users.pseudo) as pseudos'),
@@ -222,8 +225,8 @@ class User extends AbstractModels
             )
             ->join('user_room', 'rooms.id', '=', 'user_room.room_id')
             ->join('users', 'users.id', '=', 'user_room.user_id')
-            ->whereIn('rooms.id', (array)$rooms_id)
             ->where('users.id', '!=', $user_id)
+            ->whereIn('rooms.id', (array)$rooms_id)
             ->groupBy('rooms.id')
             ->get();
 
@@ -231,11 +234,23 @@ class User extends AbstractModels
 
             $response['rooms'][$k]->name = empty($v->name) ?
                 $response['rooms'][$k]->pseudos : $response['rooms'][$k]->name;
+
+            $response['rooms'][$k]->messages = new StdClass;
         }
 
         $this->data($response);
 
         return $this->response();
+    }
+
+    public function getMobileIdByRoom($roomId, $blacklistedId)
+    {
+        return DB::table('rooms')
+            ->join('user_room', 'user_room.room_id', '=', 'rooms.id')
+            ->join('mobiles', 'mobiles.user_id', '=', 'user_room.user_id')
+            ->where('rooms.id', '=', (int)$roomId)
+            ->where('user_room.user_id', '!=', (int)$blacklistedId, 'AND')
+            ->lists('mobiles.mobile_id');
     }
 
     /**

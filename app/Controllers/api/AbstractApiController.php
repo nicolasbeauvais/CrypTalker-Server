@@ -44,7 +44,7 @@ class AbstractApiController extends AbstractController
      */
     public static function answerJson($data)
     {
-        echo View::make('json', array('response' => $data))->render();
+        echo Response::json($data)->getContent();
         die;
     }
 }

@@ -72,7 +72,7 @@ class UserController extends AbstractApiController
     {
         $response = $this->getUser()->loginWithToken(Input::get('mobile_id'), Input::get('token'));
 
-         return Response::json($response);
+        return Response::json($response);
     }
 
     public function getLogout ()
