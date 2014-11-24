@@ -235,7 +235,7 @@ class User extends AbstractModels
             $response['rooms'][$k]->name = empty($v->name) ?
                 $response['rooms'][$k]->pseudos : $response['rooms'][$k]->name;
 
-            $response['rooms'][$k]->messages = new StdClass;
+            $response['rooms'][$k]->messages = array();
         }
 
         $this->data($response);
