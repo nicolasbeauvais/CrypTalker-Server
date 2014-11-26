@@ -6,7 +6,6 @@ use Models\AbstractModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use stdClass;
 
 class User extends AbstractModels
 {
@@ -136,12 +135,27 @@ class User extends AbstractModels
                     ->where('mobile_id', '=', $mobile_id, 'AND')
                     ->update(array('token' => $token));
             } else {
-                DB::table('mobiles')->insert(array(
-                    'user_id' => $user->id,
-                    'mobile_id' => $mobile_id,
-                    'token' => $token,
-                    'created_at' => date('Y-m-d H:i:s')
-                ));
+
+                $rowExist =  DB::table('mobiles')
+                    ->where('user_id', '=', $user->id)
+                    ->first();
+
+                if ($rowExist) {
+
+                    DB::table('mobiles')->update(array(
+                        'mobile_id' => $mobile_id,
+                        'token' => $token,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ))->where('mobiles.user_id', '=', $user->id);
+                } else {
+
+                    DB::table('mobiles')->insert(array(
+                        'user_id' => $user->id,
+                        'mobile_id' => $mobile_id,
+                        'token' => $token,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ));
+                }
             }
 
             $this->data('token', $token);

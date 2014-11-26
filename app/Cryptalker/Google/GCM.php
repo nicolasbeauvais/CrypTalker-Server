@@ -3,6 +3,7 @@
 namespace Cryptalker\Google;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 /**
@@ -17,22 +18,24 @@ class GCM {
     /**
      * Constructor
      */
-    function __construct(){
+    public function __construct()
+    {
         $this->serverApiKey = Config::get('external.google.cloud_messaging_key');
     }
     /**
      * Set the devices to send to
      * @param $deviceIds array of device tokens to send to
      */
-    function setDevices($deviceIds){
+    public function setDevices($deviceIds)
+    {
 
         if(is_array($deviceIds)){
             $this->devices = $deviceIds;
         } else {
             $this->devices = array($deviceIds);
         }
-
     }
+
     /**
      * Send the message to the device.
      *
@@ -41,7 +44,8 @@ class GCM {
      *
      * @return bool
      */
-    function send($message, $data){
+    public function send($message, $data)
+    {
 
         if(!is_array($this->devices) || count($this->devices) == 0){
             $this->error("No devices set");
@@ -90,7 +94,28 @@ class GCM {
         return $result;
     }
 
-    function error($msg){
+    /**
+     * Make a new GCM object and send it.
+     *
+     * @param array $devices Array of device ids
+     * @param string $message the message to send
+     * @param array $data Array of data to accompany the message
+     *
+     * @return bool
+     */
+    public static function make($devices, $message, $data)
+    {
+        $gcm = new GCM();
+        $gcm->setDevices($devices);
+        $response = $gcm->send($message, $data);
+
+        Log::info(json_encode($response));
+
+        return $response;
+    }
+
+    public function error($msg)
+    {
         echo "Android send notification failed with error:";
         echo "\t" . $msg;
         exit(1);
