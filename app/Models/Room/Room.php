@@ -45,7 +45,7 @@ class Room extends AbstractModels
         // creation of the room
         $room_id = DB::table('rooms')->insertGetId(array(
             'name' => '',
-            'key' => $this->randomString(40),
+            'key' => $this->randomString(),
             'main' => $isMain ? 1 : 0,
             'created_at' => date('Y-m-d H:i:s')
         ));

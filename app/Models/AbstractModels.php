@@ -159,7 +159,7 @@ abstract class AbstractModels
      * @param int $length
      * @return string
      */
-    protected function randomString($length = 10)
+    protected function randomString($length = 32)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
@@ -177,4 +177,4 @@ abstract class AbstractModels
 
         return $app->make('Models\\' . $name . '\\' . $name);
     }
-} 
+}
