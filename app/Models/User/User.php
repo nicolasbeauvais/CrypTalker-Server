@@ -142,11 +142,12 @@ class User extends AbstractModels
 
                 if ($rowExist) {
 
-                    DB::table('mobiles')->update(array(
-                        'mobile_id' => $mobile_id,
-                        'token' => $token,
-                        'created_at' => date('Y-m-d H:i:s')
-                    ))->where('mobiles.user_id', '=', $user->id);
+                    DB::table('mobiles')->where('mobiles.user_id', '=', $user->id)
+                        ->update(array(
+                            'mobile_id' => $mobile_id,
+                            'token' => $token,
+                            'created_at' => date('Y-m-d H:i:s')
+                        ));
                 } else {
 
                     DB::table('mobiles')->insert(array(
@@ -235,7 +236,8 @@ class User extends AbstractModels
             ->select(
                 DB::raw('GROUP_CONCAT(users.pseudo) as pseudos'),
                 'rooms.id as id',
-                'rooms.name'
+                'rooms.name',
+                'rooms.key'
             )
             ->join('user_room', 'rooms.id', '=', 'user_room.room_id')
             ->join('users', 'users.id', '=', 'user_room.user_id')
