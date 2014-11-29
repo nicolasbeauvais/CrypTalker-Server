@@ -34,23 +34,7 @@ class Message extends AbstractModels
         // Send message with GCM
         $response = GCM::make($room_user_device_ids, $message, $data);
 
-        return $this->response();
-    }
-
-    public function test()
-    {
-        $message= 'Hello from push with GCM ! ' . date('H:m:s');
-        $data = array(
-            'type' => 'new_message',
-            'date' => date('H:i:s Y-m-d'),
-            'from_user' => 'TyTy',
-            'room_id' => 1
-        );
-
-        // Send message with GCM
-        $device_ids = array('APA91bHPr8hGCYqODIZUYSMLobojSpfqyCiBNOoDu3baadEZgWv_ep8RKaSG5xEMi9fQDRSYnBbUzfnT52EmMED-kxo0Egp7X3nv09mHX4UflBanWGp8tlT7Gdhw6J0EBl2SPFXcprknwEw18ZrBwyZPMHo0yX01-g');
-        $response = GCM::make($device_ids, $message, $data);
-        dd($response);
+        $this->data($response);
 
         return $this->response();
     }

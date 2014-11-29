@@ -35,9 +35,4 @@ class MessageController extends AbstractApiController
 
          return Response::json($response);
     }
-
-    public function getTest()
-    {
-        $this->getMessage()->test();
-    }
 }
