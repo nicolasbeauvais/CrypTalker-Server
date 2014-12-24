@@ -18,11 +18,11 @@ class Message extends AbstractModels
 
         $this->required('newMessage', $user_id, $room_id, $message);
 
-        if (!$this->getModel('Room')->isInRoom($user_id, $room_id)) {
+        if (!$this->getRoom()->isInRoom($user_id, $room_id)) {
             $this->error(null, 'You\'re not in this room');
         }
 
-        $room_user_device_ids = $this->getModel('User')->getMobileIdByRoom($room_id, $user_id);
+        $room_user_device_ids = $this->getUser()->getMobileIdByRoom($room_id, $user_id);
 
         $data = array(
             'type' => 'new_message',

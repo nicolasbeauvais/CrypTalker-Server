@@ -259,6 +259,14 @@ class User extends AbstractModels
         return $this->response();
     }
 
+    /**
+     * Return an array with all the mobile id to send a GCM push notification using a room id.
+     *
+     * @param $roomId
+     * @param $blacklistedId
+     *
+     * @return mixed
+     */
     public function getMobileIdByRoom($roomId, $blacklistedId)
     {
         return DB::table('rooms')
@@ -266,6 +274,21 @@ class User extends AbstractModels
             ->join('mobiles', 'mobiles.user_id', '=', 'user_room.user_id')
             ->where('rooms.id', '=', (int)$roomId)
             ->where('user_room.user_id', '!=', (int)$blacklistedId, 'AND')
+            ->lists('mobiles.mobile_id');
+    }
+
+    /**
+     * Return an array with all the mobile id to send a GCM push notification using user ids.
+     *
+     * @param $user_ids
+     *
+     * @return mixed
+     */
+    public function getMobileIdByUserId($user_ids)
+    {
+        return DB::table('users')
+            ->join('mobiles', 'mobiles.user_id', '=', 'users.id')
+            ->whereIn('users.id', $user_ids)
             ->lists('mobiles.mobile_id');
     }
 

@@ -3,11 +3,11 @@
 namespace Models;
 
 use Controllers\Api\AbstractApiController;
+use Cryptalker\Google\GCM;
 use Cryptalker\ModelAccessor;
 use Exception;
 use ReflectionMethod;
 use stdClass;
-use Response;
 
 abstract class AbstractModels
 {
@@ -171,10 +171,23 @@ abstract class AbstractModels
         return $randomString;
     }
 
-    public function getModel($name)
+    public function push($type, $user_ids)
     {
-        global $app;
 
-        return $app->make('Models\\' . $name . '\\' . $name);
+        $users_device_ids = $this->getUser()->getMobileIdByUserId($user_ids);
+
+        $data = array(
+            'type' => $type,
+            'date' => date('H:i:s Y-m-d'),
+        );
+
+        switch ($type) {
+            case 'dashboard_refresh':
+                $message = '';
+                break;
+        }
+
+        // Send message with GCM
+        GCM::make($users_device_ids, $message, $data);
     }
 }

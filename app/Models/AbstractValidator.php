@@ -38,7 +38,7 @@ abstract class AbstractValidator
             $rules = $this->makeRules($rules, $data);
         }
 
-        return $this->result($fields, $rulesName, Validator::make($fields,$rules));
+        return $this->result($fields, $rulesName, Validator::make($fields, $rules));
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class AbstractValidator
                 }
             }
         } else {
-            $fields = array_only($fields, explode(',',$this->inputs[$rulesName]));
+            $fields = array_only($fields, explode(',', $this->inputs[$rulesName]));
         }
 
         $response = new stdClass;

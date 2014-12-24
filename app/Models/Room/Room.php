@@ -64,6 +64,11 @@ class Room extends AbstractModels
         // Attach users to the room
         DB::table('user_room')->insert($user_room);
 
+        $users_id = $users_friend_id;
+        $users_id[] = $user_id;
+
+        $this->push('dashboard_refresh', $users_friend_id);
+
         return $this->response();
     }
 
@@ -132,13 +137,15 @@ class Room extends AbstractModels
 
         // The user is already in the room
         if ($this->isInRoom($user_friend_id, $room_id)) {
+
             $this->error(null, 'The user is already in the room');
             return $this->response();
         }
 
         // Their is no friendship between the users
-        if (!$this->getModel('Friend')->isFriend($user_id, $room_id, 1)
-            || $this->getModel('Friend')->getFriendShip($user_id, $room_id)['blocked']) {
+        if (!$this->getFriend()->isFriend($user_id, $room_id, 1)
+            || $this->getFriend()->getFriendShip($user_id, $room_id)['blocked']) {
+
             $this->error(null, 'You can\'t add a user to the room if it\'s not your friend');
             return $this->response();
         }
@@ -146,7 +153,7 @@ class Room extends AbstractModels
         // If you add somebody to a main room, we create a new one.
         if ($this->isMain($user_id, $room_id)) {
 
-            // Get the third weel
+            // Get the third well
             $third_wheel_id = DB::table('user_room')
                 ->where('user_room.room_id', '=', $room_id)
                 ->where('user_room.user_id', '!=', $user_id, 'AND')

@@ -53,6 +53,8 @@ class Friend extends AbstractModels
             'created_at' => date('Y-m-d H:i:s')
         ));
 
+        $this->push('dashboard_refresh', array($user_id));
+
         return $this->response();
     }
 
@@ -96,7 +98,9 @@ class Friend extends AbstractModels
             'created_at' => date('Y-m-d H:i:s')
         ));
 
-        $this->getModel('Room')->create($user_id, (array)$user_friend_id, true);
+        $this->getRoom()->create($user_id, (array)$user_friend_id, true);
+
+        $this->push('dashboard_refresh', array($user_id, $user_friend_id));
 
         return $this->response();
     }
