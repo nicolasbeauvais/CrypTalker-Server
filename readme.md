@@ -1,6 +1,6 @@
 # CrypTalker
 
-CrypTalker is a open source Android and IOS application for strong (AES-256) crypted messaging. This repository contain only the application backend.
+CrypTalker is a open source Android application for strong (AES-256) crypted messaging. This repository contain only the application backend.
 
 Not a single message is stored in database.
 
